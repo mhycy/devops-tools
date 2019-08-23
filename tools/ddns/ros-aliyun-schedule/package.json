@@ -1,0 +1,16 @@
+{
+  "name": "ros-aliyun-schedule",
+  "version": "1.0.0",
+  "description": "Aliyun DDNS schedule script for RouterOS ssh client",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "author": "mhycy",
+  "license": "MIT",
+  "dependencies": {
+    "@mhycy/aliyun-dns": "^1.0.0",
+    "@mhycy/routeros-client": "^1.0.0"
+  }
+}
