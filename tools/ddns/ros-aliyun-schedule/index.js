@@ -55,9 +55,9 @@ async function updateSubDomainAddress(address) {
     let result = await updateSubDomainAddress(address);
     
     if(result.Status && result.Message) {
-        console.log(`Domain no need update. { Domain: ${Domain}, Address: ${address}`);
+        console.log(`Domain no need update. { Domain: ${Domain}, Address: ${address} }`);
     } else if(result.Status) {
-        console.log(`Address update success. { Domain: ${Domain}, Address: ${address}`);
+        console.log(`Address update success. { Domain: ${Domain}, Address: ${address} }`);
     } else {
         console.log(`Address update fail, need debug.`);
     }
