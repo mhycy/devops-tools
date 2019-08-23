@@ -1,0 +1,15 @@
+{
+  "name": "domain-docker-issue",
+  "version": "1.0.0",
+  "description": "Let'Encrypt cert issue script, use docker & acme.sh",
+  "main": "index.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "author": "mhycy",
+  "license": "MIT",
+  "dependencies": {
+    "dockerode": "^2.5.8",
+    "shelljs": "^0.8.3"
+  }
+}
