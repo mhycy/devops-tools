@@ -6,6 +6,8 @@ const AcmePath = "/etc/acme";
 const AliCDN_Key = "<key>";
 const AliCDN_Secret = "<secret>";
 
+const DEBUG = false;
+
 const tasks = [
   {
     AcmePath, DnsMode: 'dns_ali', EnvParams: { Ali_Key, Ali_Secret },
@@ -59,13 +61,13 @@ const tasks = [
 ]
 
 const Logger = require('./src/utils/logger.js');
-Logger.setGlobalLevel(Logger.LEVEL.DEBUG);
+Logger.setGlobalLevel(DEBUG ? Logger.LEVEL.DEBUG : Logger.LEVEL.INFO);
 const logger = Logger.createLogger('DomainAcmeIssue::Index');
 
 const Issue = require('./src/issue');
 (async () => {
   await Issue.run(tasks, {
-    debug: false,
+    debug: DEBUG,
     forceRunRenewScript: false,
     forceRenew: true
   });
