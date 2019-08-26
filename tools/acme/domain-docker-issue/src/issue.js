@@ -130,7 +130,7 @@ function runRenewScript(task) {
   }
 }
 
-function run() {
+function run(tasks) {
   for(let task of tasks) {
     let result = "";
     let CertInfo = {};
