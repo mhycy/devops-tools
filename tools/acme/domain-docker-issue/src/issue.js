@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const shelljs = require('shelljs');
 
-const logger = require('./src/utils/logger.js').createLogger('DomainAcmeIssue::Issue');
+const logger = require('./utils/logger.js').createLogger('DomainAcmeIssue::Issue');
 
 // use acme.sh in docker image.
 function buildIssueDockerCommand(options) {
