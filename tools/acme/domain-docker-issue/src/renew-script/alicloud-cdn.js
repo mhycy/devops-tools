@@ -40,7 +40,7 @@ function updateCert(cdnKey, cdnSecret, options) {
   });
 }
 
-function run(taskInfo, renewInfo) {
+async function run(taskInfo, renewInfo) {
   let { CreateTime, Cert, Key } = taskInfo.CertInfo;
   let { CdnKey, CdnSecret, SubDomain } = renewInfo;
 

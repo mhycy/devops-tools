@@ -101,7 +101,7 @@ function getCertInfomation(acmePath, domain, ecc = false) {
   return result;
 }
 
-function runRenewScript(task) {
+async function runRenewScript(task) {
   logger.debug("runRenewScript -> task", task);
 
   let renew = [];
@@ -123,10 +123,10 @@ function runRenewScript(task) {
     for(let item of renew) {
       if(typeof item === 'string') {
         logger.info("Run renew script", `Script: ${item}, ECC: ${option.EccMode}`);
-        require(`./renew-script/${item}.js`).run(option, item);
+        await require(`./renew-script/${item}.js`).run(option, item);
       } else {
         logger.info("Run renew script", `Script: ${item.script}, ECC: ${option.EccMode}`);
-        require(`./renew-script/${item.script}.js`).run(option, item);
+        await require(`./renew-script/${item.script}.js`).run(option, item);
       }
     }
   } catch (error) {
@@ -134,7 +134,7 @@ function runRenewScript(task) {
   }
 }
 
-function run(tasks, options = {}) {
+async function run(tasks, options = {}) {
   let { debug = false, forceRenew = false, forceRunRenewScript = false } = options;
   
   for(let task of tasks) {
@@ -147,7 +147,7 @@ function run(tasks, options = {}) {
     
     if(result.renew || forceRunRenewScript || forceRenew) {
       CertInfo = getCertInfomation(task.AcmePath, task.Domain);
-      runRenewScript({ ...task, CertInfo });
+      await runRenewScript({ ...task, CertInfo });
     }
 
     logger.info("Issue Certificate", `Domain: ${task.Domain}, CertType: ECC`);
@@ -156,7 +156,7 @@ function run(tasks, options = {}) {
 
     if(result.renew || forceRunRenewScript || forceRenew) {
       CertInfo = getCertInfomation(task.AcmePath, task.Domain, true);
-      runRenewScript({ ...task, CertInfo, EccMode: true });
+      await runRenewScript({ ...task, CertInfo, EccMode: true });
     }
   }
 }
