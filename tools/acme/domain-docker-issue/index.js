@@ -1,47 +1,72 @@
-const shelljs = require('shelljs');
-const Docker = require('dockerode');
+const Ali_Key = "<key>";
+const Ali_Secret = "<secret>";
+const AliasDomain = "mahodou.com";
+const AcmePath = "/etc/acme";
 
-const docker = new Docker({socketPath: '/var/run/docker.sock'});
+const AliCDN_Key = "<key>";
+const AliCDN_Secret = "<secret>";
 
-/*
-mkdir acme
+const tasks = [
+  {
+    AcmePath, DnsMode: 'dns_ali', EnvParams: { Ali_Key, Ali_Secret },
+    Domain: "*.mahodou.com", 
+    Renew: [
+    //  "nginx"
+    ],
+    EccRenew: [
+      "nginx"
+    ]
+  },
+  {
+    AcmePath, DnsMode: 'dns_ali', EnvParams: { Ali_Key, Ali_Secret },
+    Domain: "*.0v0.fun", AliasDomain,
+    Renew: [
+      //  "nginx"
+      {
+        script: "alicloud-cdn",
+        CdnKey: AliCDN_Key,
+        CdnSecret: AliCDN_Secret,
+        SubDomain: [
+          "img.0v0.fun",
+          "static.0v0.fun",
+        ]
+      }
+    ],
+    EccRenew: [
+      "nginx"
+    ]
+  },
+  {
+    AcmePath, DnsMode: 'dns_ali', EnvParams: { Ali_Key, Ali_Secret },
+    Domain: "*.owo.ac", AliasDomain, 
+    Renew: [
+      //  "nginx"
+    ],
+    EccRenew: [
+      "nginx"
+    ]
+  },
+  {
+    AcmePath, DnsMode: 'dns_ali', EnvParams: { Ali_Key, Ali_Secret },
+    Domain: "*.mhycy.me", AliasDomain, 
+    Renew: [
+      //  "nginx"
+    ],
+    EccRenew: [
+      "nginx"
+    ]
+  }
+]
 
-# 签发RSA证书
-docker run --rm -it -v acme:/acme.sh -e CX_Key="XXXXX" -e CX_Secret="XXXXX"  neilpang/acme.sh --issue --dns dns_cx -d '*.mahodou.com'
+const Logger = require('./src/utils/logger.js');
+Logger.setGlobalLevel(Logger.LEVEL.DEBUG);
+const logger = Logger.createLogger('DomainAcmeIssue::Index');
 
-# 签发ECC证书, ECC证书会在域名路径后面添加 _ecc 后缀
-docker run --rm -it -v acme:/acme.sh -e CX_Key="XXXXX" -e CX_Secret="XXXXX"  neilpang/acme.sh --issue -k ec-256 --dns dns_cx -d '*.mahodou.com'
-*/
-
-async function runAcmeDocker() {
-    docker.createContainer({
-        Image: 'ubuntu',
-        AttachStdin: false,
-        AttachStdout: true,
-        AttachStderr: true,
-        Tty: true,
-        Cmd: ['/bin/bash', '-c', 'tail -f /var/log/dmesg'],
-        OpenStdin: false,
-        StdinOnce: false
-      }).then(function(container) {
-        return container.start();
-      }).then(function(container) {
-        return container.resize({
-          h: process.stdout.rows,
-          w: process.stdout.columns
-        });
-      }).then(function(container) {
-        return container.stop();
-      }).then(function(container) {
-        return container.remove();
-      }).then(function(data) {
-        console.log('container removed');
-      }).catch(function(err) {
-        console.log(err);
-      });
-}
-
-
+const Issue = require('./src/issue');
 (async () => {
-    await runAcmeDocker();
+  await Issue.run(tasks, {
+    debug: DEBUG,
+    forceRunRenewScript: false,
+    forceRenew: true
+  });
 })()
