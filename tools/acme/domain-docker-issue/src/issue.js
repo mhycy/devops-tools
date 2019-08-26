@@ -102,6 +102,8 @@ function getCertInfomation(acmePath, domain, ecc = false) {
 }
 
 function runRenewScript(task) {
+  logger.debug("runRenewScript -> task", task);
+
   let renew = [];
   if(task.EccMode) {
     if(!task.EccRenew || task.EccRenew instanceof Array || task.EccRenew.length === 0) {
@@ -132,7 +134,9 @@ function runRenewScript(task) {
   }
 }
 
-function run(tasks, debug = false) {
+function run(tasks, options = {}) {
+  let { debug = false, forceRenew = false, forceRunRenewScript = false } = options;
+  
   for(let task of tasks) {
     let result = "";
     let CertInfo = {};
@@ -140,15 +144,20 @@ function run(tasks, debug = false) {
     logger.info("Issue Certificate", `Domain: ${task.Domain}, CertType: RSA`);
     result = runAcmeDocker(task, debug);
     logger.info("Issue Result", `Status: ${result.status}, Renew: ${result.renew}, Message: ${result.message}`);
-    CertInfo = getCertInfomation(task.AcmePath, task.Domain);
-    runRenewScript({ ...task, CertInfo });
+    
+    if(result.renew || forceRunRenewScript || forceRenew) {
+      CertInfo = getCertInfomation(task.AcmePath, task.Domain);
+      runRenewScript({ ...task, CertInfo });
+    }
 
     logger.info("Issue Certificate", `Domain: ${task.Domain}, CertType: ECC`);
     CertInfo = runAcmeDocker({...task, EccMode: true }, debug);
     logger.info("Issue Result", `Status: ${result.status}, Renew: ${result.renew}, Message: ${result.message}`);
 
-    CertInfo = getCertInfomation(task.AcmePath, task.Domain, true);
-    runRenewScript({ ...task, CertInfo, EccMode: true });
+    if(result.renew || forceRunRenewScript || forceRenew) {
+      CertInfo = getCertInfomation(task.AcmePath, task.Domain, true);
+      runRenewScript({ ...task, CertInfo, EccMode: true });
+    }
   }
 }
 
