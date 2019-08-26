@@ -69,6 +69,6 @@ const Issue = require('./src/issue');
   await Issue.run(tasks, {
     debug: DEBUG,
     forceRunRenewScript: false,
-    forceRenew: true
+    forceRenew: false
   });
 })()

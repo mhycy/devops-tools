@@ -6,7 +6,7 @@ const logger = require('./utils/logger.js').createLogger('DomainAcmeIssue::Issue
 
 // use acme.sh in docker image.
 function buildIssueDockerCommand(options) {
-  let { AcmePath, Domain, DnsMode, EnvParams, EccMode = false, AliasDomain = undefined} = options;
+  let { AcmePath, Domain, DnsMode, EnvParams, EccMode = false, AliasDomain = undefined, forceRenew = false} = options;
 
   AcmePath = path.resolve(AcmePath);
 
@@ -23,6 +23,9 @@ function buildIssueDockerCommand(options) {
 
   // mode 'issue'
   dockerCommand += ` --issue`;
+
+  // if force mode
+  if(forceRenew) { dockerCommand += ` --force`; }
 
   // issue domain
   dockerCommand += ` -d ${Domain}`;
@@ -144,7 +147,7 @@ async function run(tasks, options = {}) {
     let CertInfo = {};
 
     logger.info("Issue Certificate", `Domain: ${task.Domain}, CertType: RSA`);
-    result = runAcmeDocker(task, debug);
+    result = runAcmeDocker({...task, forceRenew}, debug);
     logger.info("Issue Result", `Status: ${result.status}, Renew: ${result.renew}, Message: ${result.message}`);
     
     if(result.renew || forceRunRenewScript || forceRenew) {
@@ -153,7 +156,7 @@ async function run(tasks, options = {}) {
     }
 
     logger.info("Issue Certificate", `Domain: ${task.Domain}, CertType: ECC`);
-    CertInfo = runAcmeDocker({...task, EccMode: true }, debug);
+    CertInfo = runAcmeDocker({...task, forceRenew, EccMode: true }, debug);
     logger.info("Issue Result", `Status: ${result.status}, Renew: ${result.renew}, Message: ${result.message}`);
 
     if(result.renew || forceRunRenewScript || forceRenew) {
