@@ -25,7 +25,7 @@ module.exports = {
     if(typeof renewInfo != 'string' && renewInfo.command) {
       return reloadNginx(command);
     } else {
-      return reloadNginx(command);
+      return reloadNginx();
     }
   }
 };
