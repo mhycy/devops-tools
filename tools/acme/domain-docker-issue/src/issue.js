@@ -131,7 +131,7 @@ async function runRenewScript(task) {
         await require(`./renew-script/${item.script}.js`).run(option, item);
       }
     } catch (error) {
-      logger.error("runRenewScript", item, error);
+      logger.error("runRenewScript", error.message);
     }
   }
 }
