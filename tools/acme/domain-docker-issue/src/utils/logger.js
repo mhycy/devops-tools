@@ -9,8 +9,10 @@ const LEVEL = {
 }
 Object.freeze(LEVEL);
 
+let GlobalLevel = LEVEL.INFO;
+
 class Logger {
-    constructor(name, level = LEVEL.INFO) {
+    constructor(name, level = GlobalLevel) {
         this.name = name;
         this.level = level;
     }
@@ -77,11 +79,16 @@ class Logger {
     }
 }
 
-function createLogger(name, level = LEVEL.INFO) {
+function createLogger(name, level = GlobalLevel) {
     return new Logger(name, level);
+}
+
+function setGlobalLevel(level) {
+    GlobalLevel = level;
 }
 
 module.exports = {
     LEVEL,
+    setGlobalLevel,
     createLogger
 }
