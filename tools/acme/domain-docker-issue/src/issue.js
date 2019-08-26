@@ -148,7 +148,7 @@ async function run(tasks, options = {}) {
 
     logger.info("Issue Certificate", `Domain: ${task.Domain}, CertType: RSA`);
     result = runAcmeDocker({...task, forceRenew}, debug);
-    logger.info("Issue Result", `Status: ${result.status}, Renew: ${result.renew}, Message: ${result.message}`);
+    logger.info("Issue Result", `Domain: ${task.Domain}, Status: ${result.status}, Renew: ${result.renew}, Message: ${result.message}`);
     
     if(result.renew || forceRunRenewScript || forceRenew) {
       CertInfo = getCertInfomation(task.AcmePath, task.Domain);
@@ -157,7 +157,7 @@ async function run(tasks, options = {}) {
 
     logger.info("Issue Certificate", `Domain: ${task.Domain}, CertType: ECC`);
     CertInfo = runAcmeDocker({...task, forceRenew, EccMode: true }, debug);
-    logger.info("Issue Result", `Status: ${result.status}, Renew: ${result.renew}, Message: ${result.message}`);
+    logger.info("Issue Result", `Domain: ${task.Domain}, Status: ${result.status}, Renew: ${result.renew}, Message: ${result.message}`);
 
     if(result.renew || forceRunRenewScript || forceRenew) {
       CertInfo = getCertInfomation(task.AcmePath, task.Domain, true);
