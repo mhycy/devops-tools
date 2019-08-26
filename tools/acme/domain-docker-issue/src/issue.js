@@ -124,10 +124,10 @@ async function runRenewScript(task) {
   for(let item of renewTask) {
     try {
       if(typeof item === 'string') {
-        logger.info("Run renew script", `Script: ${item}, ECC: ${task.EccMode}`);
+        logger.info("Run renew script", `Script: ${item}, ECC: ${task.EccMode ? true : false}`);
         await require(`./renew-script/${item}.js`).run(task, item);
       } else {
-        logger.info("Run renew script", `Script: ${item.script}, ECC: ${task.EccMode}`);
+        logger.info("Run renew script", `Script: ${item.script}, ECC: ${task.EccMode ? true : false}`);
         await require(`./renew-script/${item.script}.js`).run(task, item);
       }
     } catch (error) {
