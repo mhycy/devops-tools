@@ -70,18 +70,20 @@ function runAcmeDocker(options, debug = false) {
 
 // get cert infomation. it depend acme bind path.
 function getCertInfomation(acmePath, domain, ecc = false) {
+  let certPath, keyPath, infoPath = "";
+  
   if(!ecc) {
-    let certPath = path.resolve(acmePath, domain, `${domain}.cer`);
-    let keyPath = path.resolve(acmePath, domain, `${domain}.key`);
-    let infoPath = path.resolve(acmePath, domain, `${domain}.conf`);
+    certPath = path.resolve(acmePath, domain, `${domain}.cer`);
+    keyPath = path.resolve(acmePath, domain, `${domain}.key`);
+    infoPath = path.resolve(acmePath, domain, `${domain}.conf`);
   } else {
-    let certPath = path.resolve(acmePath, `${domain}_ecc`, `${domain}.cer`);
-    let keyPath = path.resolve(acmePath, `${domain}_ecc`, `${domain}.key`);
-    let infoPath = path.resolve(acmePath, `${domain}_ecc`, `${domain}.conf`);
+    certPath = path.resolve(acmePath, `${domain}_ecc`, `${domain}.cer`);
+    keyPath = path.resolve(acmePath, `${domain}_ecc`, `${domain}.key`);
+    infoPath = path.resolve(acmePath, `${domain}_ecc`, `${domain}.conf`);
   }
 
-  let cert = fs.readFileSync(certPath).toString('ascii');
-  let key = fs.readFileSync(keyPath).toString('ascii');
+  let Cert = fs.readFileSync(certPath).toString('ascii');
+  let Key = fs.readFileSync(keyPath).toString('ascii');
   let info = fs.readFileSync(infoPath).toString('ascii');
 
   let CreateTime = /Le_CertCreateTime='([0-9]+)'/g.exec(info);
