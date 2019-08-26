@@ -147,6 +147,7 @@ async function run(tasks, options = {}) {
     
     if(result.renew || forceRunRenewScript || forceRenew) {
       CertInfo = getCertInfomation(task.AcmePath, task.Domain);
+      logger.debug("run::CertInfo", CertInfo);
       await runRenewScript({ ...task, CertInfo });
     }
 
@@ -156,6 +157,7 @@ async function run(tasks, options = {}) {
 
     if(result.renew || forceRunRenewScript || forceRenew) {
       CertInfo = getCertInfomation(task.AcmePath, task.Domain, true);
+      logger.debug("run::CertInfo", CertInfo);
       await runRenewScript({ ...task, CertInfo, EccMode: true });
     }
   }
