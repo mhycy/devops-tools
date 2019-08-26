@@ -104,25 +104,25 @@ function getCertInfomation(acmePath, domain, ecc = false) {
 async function runRenewScript(task) {
   logger.debug("runRenewScript -> task", task);
 
-  let renew = [];
+  let renewTask = [];
   if(task.EccMode) {
     if(!task.EccRenew || (task.EccRenew instanceof Array && task.EccRenew.length === 0) ) {
       return;
     } else {
-      renew = task.EccRenew;
+      renewTask = task.EccRenew;
     }
   } else {
     if(!task.Renew || (task.Renew instanceof Array && task.Renew.length === 0) ) {
       return;
     } else {
-      renew = task.Renew;
+      renewTask = task.Renew;
     }
   }
 
-  logger.debug("runRenewScript -> renew", renew);
+  logger.debug("runRenewScript -> renewTask", renewTask);
   
-  try {
-    for(let item of renew) {
+  for(let item of renew) {
+    try {
       if(typeof item === 'string') {
         logger.info("Run renew script", `Script: ${item}, ECC: ${option.EccMode}`);
         await require(`./renew-script/${item}.js`).run(option, item);
@@ -130,9 +130,9 @@ async function runRenewScript(task) {
         logger.info("Run renew script", `Script: ${item.script}, ECC: ${option.EccMode}`);
         await require(`./renew-script/${item.script}.js`).run(option, item);
       }
+    } catch (error) {
+      logger.error("runRenewScript", item, error);
     }
-  } catch (error) {
-    logger.error("runRenewScript", item, error);
   }
 }
 
