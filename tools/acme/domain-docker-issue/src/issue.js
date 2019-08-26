@@ -106,13 +106,13 @@ async function runRenewScript(task) {
 
   let renew = [];
   if(task.EccMode) {
-    if(!task.EccRenew || task.EccRenew instanceof Array || task.EccRenew.length === 0) {
+    if(!task.EccRenew || (task.EccRenew instanceof Array && task.EccRenew.length === 0) ) {
       return;
     } else {
       renew = task.EccRenew;
     }
   } else {
-    if(!task.Renew || task.Renew instanceof Array || task.Renew.length === 0) {
+    if(!task.Renew || (task.Renew instanceof Array && task.Renew.length === 0) ) {
       return;
     } else {
       renew = task.Renew;
