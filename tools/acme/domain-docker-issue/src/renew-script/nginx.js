@@ -3,11 +3,11 @@ const logger = require('../utils/logger.js').createLogger("Renew::Nginx");
 
 function reloadNginx(command) {
   let result = { status: false, message: ''};
-  
+  let cmdResult = "";
   if(!command) {
-    let cmdResult = shelljs.exec('/usr/sbin/service nginx force-reload');
+    cmdResult = shelljs.exec('/usr/sbin/service nginx force-reload');
   } else {
-    let cmdResult = shelljs.exec(command);
+    cmdResult = shelljs.exec(command);
     logger.debug("reloadNginx", command);
   }
   
