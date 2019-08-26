@@ -41,9 +41,9 @@ function buildIssueDockerCommand(options) {
 }
 
 // run docker for issue certificate.
-function runAcmeDocker(options) {
+function runAcmeDocker(options, debug = false) {
   let result = { status: false, renew: false, message: ''};
-  let acme = shelljs.exec(buildIssueDockerCommand(options), { silent: DEBUG ? true : false });
+  let acme = shelljs.exec(buildIssueDockerCommand(options), { silent: debug ? true : false });
 
   if(acme.stderr != '') {
     result.message = acme.stderr;
@@ -130,19 +130,19 @@ function runRenewScript(task) {
   }
 }
 
-function run(tasks) {
+function run(tasks, debug = false) {
   for(let task of tasks) {
     let result = "";
     let CertInfo = {};
 
     logger.info("Issue Certificate", `Domain: ${task.Domain}, CertType: RSA`);
-    result = runAcmeDocker(task);
+    result = runAcmeDocker(task, debug);
     logger.info("Issue Result", `Status: ${result.status}, Renew: ${result.renew}, Message: ${result.message}`);
     CertInfo = getCertInfomation(task.AcmePath, task.Domain);
     runRenewScript({ ...task, CertInfo });
 
     logger.info("Issue Certificate", `Domain: ${task.Domain}, CertType: ECC`);
-    CertInfo = runAcmeDocker({...task, EccMode: true });
+    CertInfo = runAcmeDocker({...task, EccMode: true }, debug);
     logger.info("Issue Result", `Status: ${result.status}, Renew: ${result.renew}, Message: ${result.message}`);
 
     CertInfo = getCertInfomation(task.AcmePath, task.Domain, true);
