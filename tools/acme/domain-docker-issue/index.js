@@ -65,7 +65,7 @@ const logger = Logger.createLogger('DomainAcmeIssue::Index');
 const Issue = require('./src/issue');
 (async () => {
   await Issue.run(tasks, {
-    debug: DEBUG,
+    debug: false,
     forceRunRenewScript: false,
     forceRenew: true
   });
