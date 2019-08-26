@@ -43,7 +43,7 @@ function buildIssueDockerCommand(options) {
 // run docker for issue certificate.
 function runAcmeDocker(options, debug = false) {
   let result = { status: false, renew: false, message: ''};
-  let acme = shelljs.exec(buildIssueDockerCommand(options), { silent: debug ? true : false });
+  let acme = shelljs.exec(buildIssueDockerCommand(options), { silent: debug ? false : true });
 
   if(acme.stderr != '') {
     result.message = acme.stderr;
