@@ -121,7 +121,7 @@ async function runRenewScript(task) {
 
   logger.debug("runRenewScript -> renewTask", renewTask);
   
-  for(let item of renew) {
+  for(let item of renewTask) {
     try {
       if(typeof item === 'string') {
         logger.info("Run renew script", `Script: ${item}, ECC: ${option.EccMode}`);
