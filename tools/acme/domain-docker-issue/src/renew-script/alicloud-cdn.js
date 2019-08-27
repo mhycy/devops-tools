@@ -27,12 +27,12 @@ function updateCert(cdnKey, cdnSecret, options) {
       },
       { method: 'POST' }
     ).then((result) => {
-      resolve({
+      return resolve({
         status: true,
         ...result
       });
     }, (error) => {
-      resolve({
+      return resolve({
         status: false,
         message: error.message
       });
